@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Currency Converter</title>
+        <style>
+            body {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100vh;
+                margin: 0;
+                background: url(codester_background_for_desktop_plain_365d155c-e511-4206-8f4d-cbb550c2e6e2.png);
+                background-size: cover;
+                color: white;
+                font-size: x-large;
+            }
+            form {
+                width: 300px;
+                margin-right: 20px;
+                text-align: center;
+                padding: 20px;
+                color: white;
+            }
+            input {
+                margin-top: 10px;
+                background-color: transparent;
+                color: white;
+            }
+            h2 {
+                text-align: center;
+            }
+            ul {
+                list-style: none;
+                text-align: left;
+                padding-inline-start: 10px;
+                width: 200px;
+                text-align: center;
+            }
+            #rates {
+                background-color: rgba(255, 255, 255, 0.8);
+                opacity: 0.8;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+                padding: 5px;
+                margin-top: 20px;
+                font-size: 14px;
+                color: black;
+            }
+
+            #log {
+                color: black;
+                background-color: rgba(255, 255, 255, 0.8);
+                opacity: 0.8;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+                width: 200px;
+                height: 275px;
+                overflow-y: scroll;
+                margin-top: 5px;
+                margin-left: 20px;
+                padding: 5px;
+                font-size: 17px;
+            }
+
+            .button-grid {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 0px;
+                margin-top: 10px;
+                width: fit-content;
+            }
+            .button {
+                padding: 5px;
+                background-color: rgba(249, 249, 249, 0.692);
+                color: black;
+                border: none;
+                border-radius: 40px;
+                box-shadow: 0px 5px 15px rgba(0, 0, 0, .5);
+                height: 70px;
+                width: 70px;
+                cursor: pointer;
+                margin: 5px;
+                /* transition: all 0.1s ease-in; */
+                position: relative;
+                font-size: 12px;
+            }
+            .button::before {
+                content: attr(data-currency-symbol);
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 20px;
+                opacity: 0;
+                /* transition: all 0.3s ease-in-out; */
+            }
+            .button.active::before {
+                opacity: 1;
+                font-size: 20px;
+            }
+            .button.active {
+                background-color: rgba(
+                    5,
+                    151,
+                    0,
+                    0.5
+                ); /* set alpha to 0.5 for 50% opacity */
+                font-size: 20;
+            }
+            .button.active::after {
+                content: attr(data-currency-symbol);
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                /* transform: translate(-50%, -50%); */
+                font-size: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="rates">
+            <h2>Conversion Rates</h2>
+            <ul>
+                <li>Japanese Yen: 136.640</li>
+                <li>Indian Rupee: 82.122</li>
+                <li>Chinese Yuan Renminbi: 6.969</li>
+                <li>Malaysian Ringgit: 4.518</li>
+                <li>Australian Dollar: 1.521</li>
+                <li>Canadian Dollar: 1.384</li>
+                <li>Singapore Dollar: 1.355</li>
+                <hr />
+                <li>US Dollar: 1.00 USD</li>
+                <hr />
+                <li>Euro: 0.944</li>
+                <li>Swiss Franc: 0.931</li>
+                <li>British Pound: 0.839</li>
+            </ul>
+        </div>
+        <form>
+            <!-- <label for="usd">Enter Amount in USD: </label> -->
+            <div class="button-grid">
+                <button
+                    class="button"
+                    type="button"
+                    data-currency="JPY"
+                    data-currency-name="Japanese Yen"
+                >
+                    Japanese Yen
+                </button>
+                <button
+                    class="button"
+                    type="button"
+                    data-currency="EUR"
+                    data-currency-name="Euro"
+                >
+                    Euro
+                </button>
+                <button
+                    class="button"
+                    type="button"
+                    data-currency="INR"
+                    data-currency-name="Indian Rupee"
+                >
+                    Indian Rupee
+                </button>
+                <button
+                    class="button"
+                    type="button"
+                    data-currency="GBP"
+                    data-currency-name="British Pound"
+                >
+                    British Pound
+                </button>
+                <button
+                    class="button"
+                    type="button"
+                    data-currency="AUD"
+                    data-currency-name="Australian Dollar"
+                >
+                    Australian Dollar
+                </button>
+                <button
+                    class="button"
+                    type="button"
+                    data-currency="CAD"
+                    data-currency-name="Canadian Dollar"
+                >
+                    Canadian Dollar
+                </button>
+                <button
+                    class="button"
+                    type="button"
+                    data-currency="SGD"
+                    data-currency-name="Singapore Dollar"
+                >
+                    Singapore Dollar
+                </button>
+                <button
+                    class="button"
+                    type="button"
+                    data-currency="SFr"
+                    data-currency-name="Swiss Franc"
+                >
+                    Swiss Franc
+                </button>
+                <button
+                    class="button"
+                    type="button"
+                    data-currency="MYR"
+                    data-currency-name="Malaysian Ringgit"
+                >
+                    Malaysian Ringgit
+                </button>
+                <button
+                    class="button"
+                    type="button"
+                    data-currency="CNY"
+                    data-currency-name="Chinese Yuan Renminbi"
+                >
+                    Chinese Yuan Renminbi
+                </button>
+            </div>
+            <hr />
+            <input
+                placeholder="Enter Amount in USD"
+                type="text"
+                id="usd"
+                name="usd"
+            /><br />
+            <!-- <input type="submit" value="Convert" /> -->
+        </form>
+        <div id="log"></div>
+        <script>
+            const log = document.getElementById("log");
+
+            // Handle form submission
+            document
+                .querySelector("form")
+                .addEventListener("submit", function (e) {
+                    e.preventDefault(); // prevent form submission
+
+                    // Get USD input value
+                    const usd = parseFloat(
+                        document.getElementById("usd").value
+                    );
+
+                    // Conversion rates for each currency
+                    const rates = {
+                        JPY: 136.64,
+                        INR: 82.122,
+                        CNY: 6.969,
+                        MYR: 4.518,
+                        AUD: 1.521,
+                        CAD: 1.384,
+                        SGD: 1.355,
+                        USD: 1.0,
+                        EUR: 0.944,
+                        GBP: 0.839,
+                        SFr: 0.931,
+                    };
+
+                    // Get all active currency buttons and convert USD to each currency
+                    const selectedButtons =
+                        document.querySelectorAll(".button.active");
+                    let logEntries = [];
+                    selectedButtons.forEach(function (button) {
+                        const currency = button.dataset.currency;
+                        const rate = rates[currency];
+                        const converted = usd * rate;
+                        const logEntry = {
+                            currency: currency,
+                            converted: converted,
+                        };
+                        logEntries.push(logEntry);
+                    });
+
+                    // Sort log entries from highest to lowest conversion value
+                    logEntries.sort(function (a, b) {
+                        return b.converted - a.converted;
+                    });
+
+                    // Generate HTML for log entries
+                    let logHTML = "";
+                    logEntries.forEach(function (entry) {
+                        const currencySymbol = getCurrencySymbol(
+                            entry.currency
+                        );
+                        const currencyAbbreviation = getCurrencyAbbreviation(
+                            entry.currency
+                        );
+                        logHTML += `$${usd.toFixed(
+                            2
+                        )} = ${currencySymbol}${entry.converted.toFixed(
+                            2
+                        )} ${currencyAbbreviation}<hr>`;
+                    });
+
+                    // Add log entries to log div
+                    log.insertAdjacentHTML("afterbegin", `<p>${logHTML}</p>`);
+
+                    // Clear USD input field and deactivate all currency buttons
+                    document.getElementById("usd").value = "";
+                    document
+                        .querySelectorAll(".button")
+                        .forEach(function (button) {
+                            button.classList.remove("active");
+
+                            // Change button text back to original
+                            button.textContent = button.dataset.currencyName;
+                            button.style.fontSize = "12px";
+                        });
+                });
+            document.querySelectorAll(".button").forEach(function (button) {
+                button.addEventListener("click", function () {
+                    // Toggle button active state
+                    this.classList.toggle("active");
+
+                    document.getElementById("usd").focus();
+
+                    // Change button text to currency symbol
+                    if (this.classList.contains("active")) {
+                        const currency = this.dataset.currency;
+                        const symbol = getCurrencySymbol(currency);
+                        this.textContent = symbol;
+                        this.style.fontSize = "24px";
+                    } else {
+                        this.textContent = this.dataset.currencyName;
+                        this.style.fontSize = "12px";
+                    }
+                });
+            });
+
+            // Set focus to USD input field on page load
+            window.addEventListener("load", function () {
+                document.getElementById("usd").focus();
+            });
+
+            // Helper function to get currency symbol for a given currency code
+            function getCurrencySymbol(currency) {
+                switch (currency) {
+                    case "JPY":
+                        return "¥";
+                    case "EUR":
+                        return "€";
+                    case "INR":
+                        return "₹";
+                    case "GBP":
+                        return "£";
+                    case "AUD":
+                        return "AU $";
+                    case "CAD":
+                        return "CA $";
+                    case "SGD":
+                        return "SG $";
+                    case "SFr":
+                        return "SFr ";
+                    case "MYR":
+                        return "RM";
+                    case "CNY":
+                        return "¥";
+                    default:
+                        return "";
+                }
+            }
+            // Helper function to get currency abbreviation for a given currency code
+            function getCurrencyAbbreviation(currency) {
+                switch (currency) {
+                    case "JPY":
+                        return "JPY";
+                    case "EUR":
+                        return "EUR";
+                    case "INR":
+                        return "INR";
+                    case "GBP":
+                        return "GBP";
+                    case "AUD":
+                        return "";
+                    case "CAD":
+                        return "";
+                    case "SGD":
+                        return "";
+                    case "SFr":
+                        return "";
+                    case "MYR":
+                        return "MYR";
+                    case "CNY":
+                        return "CNY";
+                    default:
+                        return "";
+                }
+            }
+        </script>
+    </body>
+</html>
+
+
+<!-- <!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Currency Converter</title>
+        <style>
+            body {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100vh;
+                margin: 0;
+                background: url(codester_background_for_desktop_plain_365d155c-e511-4206-8f4d-cbb550c2e6e2.png);
+                background-size: cover;
+                color: white;
+                font-size: x-large;
+            }
+            form {
+                width: 300px;
+                margin-right: 20px;
+                text-align: center;
+                padding: 20px;
+                color: black;
+            }
+            input[type="submit"] {
+                margin-top: 10px;
+                background-color: white;
+            }
+            #rates {
+                background-color: rgba(255, 255, 255, 0.8);
+                opacity: 0.8;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+                padding: 5px;
+                margin-top: 20px;
+                font-size: 14px;
+                color: black;
+            }
+
+            #log {
+                color: black;
+                background-color: rgba(255, 255, 255, 0.8);
+                opacity: 0.8;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+                width: 200px;
+                height: 275px;
+                overflow-y: scroll;
+                margin-top: 20px;
+                margin-left: 20px;
+                padding: 5px;
+                font-size: 20px;
+            }
+
+            .button-grid {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 0px;
+                margin-top: 10px;
+                width: fit-content;
+            }
+            .button {
+                padding: 5px;
+                background-color: rgba(249, 249, 249, 0.692);
+                color: black;
+                border: none;
+                border-radius: 40px;
+                box-shadow: 0px 5px 15px rgba(0, 0, 0, 1);
+                height: 70px;
+                width: 70px;
+                cursor: pointer;
+                margin: 5px;
+                /* transition: all 0.1s ease-in; */
+                position: relative;
+                font-size: 12px;
+            }
+            .button::before {
+                content: attr(data-currency-symbol);
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 20px;
+                opacity: 0;
+                /* transition: all 0.3s ease-in-out; */
+            }
+            .button.active::before {
+                opacity: 1;
+                font-size: 20px;
+            }
+            .button.active {
+                background-color: rgba(
+                    5,
+                    151,
+                    0,
+                    0.8
+                ); /* set alpha to 0.5 for 50% opacity */
+                font-size: 20;
+            }
+            .button.active::after {
+                content: attr(data-currency-symbol);
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                /* transform: translate(-50%, -50%); */
+                font-size: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="rates">
+            <h3>Conversion Rates:</h3>
+            <ul>
+                <li>Japanese Yen: 136.640</li>
+                <li>Indian Rupee: 82.122</li>
+                <li>Chinese Yuan Renminbi: 6.969</li>
+                <li>Malaysian Ringgit: 4.518</li>
+                <li>Australian Dollar: 1.521</li>
+                <li>Canadian Dollar: 1.384</li>
+                <li>Singapore Dollar: 1.355</li>
+                <hr />
+                <li>US Dollar: 1.00 USD</li>
+                <hr />
+                <li>Euro: 0.944</li>
+                <li>Swiss Franc: 0.931</li>
+                <li>British Pound: 0.839</li>
+            </ul>
+        </div>
+        <form>
+            <div class="button-grid">
+                <button
+                    class="button"
+                    type="button"
+                    data-currency="JPY"
+                    data-currency-name="Japanese Yen"
+                >
+                    Japanese Yen
+                </button>
+                <button
+                    class="button"
+                    type="button"
+                    data-currency="EUR"
+                    data-currency-name="Euro"
+                >
+                    Euro
+                </button>
+                <button
+                    class="button"
+                    type="button"
+                    data-currency="INR"
+                    data-currency-name="Indian Rupee"
+                >
+                    Indian Rupee
+                </button>
+                <button
+                    class="button"
+                    type="button"
+                    data-currency="GBP"
+                    data-currency-name="British Pound"
+                >
+                    British Pound
+                </button>
+                <button
+                    class="button"
+                    type="button"
+                    data-currency="AUD"
+                    data-currency-name="Australian Dollar"
+                >
+                    Australian Dollar
+                </button>
+                <button
+                    class="button"
+                    type="button"
+                    data-currency="CAD"
+                    data-currency-name="Canadian Dollar"
+                >
+                    Canadian Dollar
+                </button>
+                <button
+                    class="button"
+                    type="button"
+                    data-currency="SGD"
+                    data-currency-name="Singapore Dollar"
+                >
+                    Singapore Dollar
+                </button>
+                <button
+                    class="button"
+                    type="button"
+                    data-currency="CHF"
+                    data-currency-name="Swiss Franc"
+                >
+                    Swiss Franc
+                </button>
+                <button
+                    class="button"
+                    type="button"
+                    data-currency="MYR"
+                    data-currency-name="Malaysian Ringgit"
+                >
+                    Malaysian Ringgit
+                </button>
+                <button
+                    class="button"
+                    type="button"
+                    data-currency="CNY"
+                    data-currency-name="Chinese Yuan Renminbi"
+                >
+                    Chinese Yuan Renminbi
+                </button>
+            </div>
+            <hr />
+            <input
+                placeholder="Enter Amount in USD"
+                type="text"
+                id="usd"
+                name="usd"
+            /><br />
+        </form>
+        <div id="log"></div>
+        <script>
+            const log = document.getElementById("log");
+
+            // Handle form submission
+            document
+                .querySelector("form")
+                .addEventListener("submit", function (e) {
+                    e.preventDefault(); // prevent form submission
+
+                    // Get USD input value
+                    const usd = parseFloat(
+                        document.getElementById("usd").value
+                    );
+
+                    // Conversion rates for each currency
+                    const rates = {
+                        JPY: 136.64,
+                        INR: 82.122,
+                        CNY: 6.969,
+                        MYR: 4.518,
+                        AUD: 1.521,
+                        CAD: 1.384,
+                        SGD: 1.355,
+                        USD: 1.0,
+                        EUR: 0.944,
+                        GBP: 0.839,
+                        CHF: 0.931,
+                    };
+
+                    // Get all active currency buttons and convert USD to each currency
+                    const selectedButtons =
+                        document.querySelectorAll(".button.active");
+                    let logEntries = [];
+                    selectedButtons.forEach(function (button) {
+                        const currency = button.dataset.currency;
+                        const rate = rates[currency];
+                        const converted = usd * rate;
+                        const logEntry = {
+                            currency: currency,
+                            converted: converted,
+                        };
+                        logEntries.push(logEntry);
+                    });
+
+                    // Sort log entries from highest to lowest conversion value
+                    logEntries.sort(function (a, b) {
+                        return b.converted - a.converted;
+                    });
+
+                    // Generate HTML for log entries
+                    let logHTML = "";
+                    logEntries.forEach(function (entry) {
+                        const currencySymbol = getCurrencySymbol(
+                            entry.currency
+                        );
+                        const currencyAbbreviation = getCurrencyAbbreviation(
+                            entry.currency
+                        );
+                        logHTML += `$${usd.toFixed(
+                            2
+                        )} = ${currencySymbol}${entry.converted.toFixed(
+                            2
+                        )} <br>(${currencyAbbreviation})<br>`;
+                    });
+
+                    // Add log entries to log div
+                    log.insertAdjacentHTML("afterbegin", `<p>${logHTML}</p>`);
+
+                    // Clear USD input field and deactivate all currency buttons
+                    document.getElementById("usd").value = "";
+                    document
+                        .querySelectorAll(".button")
+                        .forEach(function (button) {
+                            button.classList.remove("active");
+
+                            // Change button text back to original
+                            button.textContent = button.dataset.currencyName;
+                            button.style.fontSize = "12px";
+                        });
+                });
+            document.querySelectorAll(".button").forEach(function (button) {
+                button.addEventListener("click", function () {
+                    // Toggle button active state
+                    this.classList.toggle("active");
+
+                    document.getElementById("usd").focus();
+
+                    // Change button text to currency symbol
+                    if (this.classList.contains("active")) {
+                        const currency = this.dataset.currency;
+                        const symbol = getCurrencySymbol(currency);
+                        this.textContent = symbol;
+                        this.style.fontSize = "24px";
+                    } else {
+                        this.textContent = this.dataset.currencyName;
+                        this.style.fontSize = "12px";
+                    }
+                });
+            });
+
+            // Set focus to USD input field on page load
+            window.addEventListener("load", function () {
+                document.getElementById("usd").focus();
+            });
+
+            // Helper function to get currency symbol for a given currency code
+            function getCurrencySymbol(currency) {
+                switch (currency) {
+                    case "JPY":
+                        return "¥";
+                    case "EUR":
+                        return "€";
+                    case "INR":
+                        return "₹";
+                    case "GBP":
+                        return "£";
+                    case "AUD":
+                        return "$";
+                    case "CAD":
+                        return "$";
+                    case "SGD":
+                        return "$";
+                    case "CHF":
+                        return "CHF";
+                    case "MYR":
+                        return "RM";
+                    case "CNY":
+                        return "¥";
+                    default:
+                        return "";
+                }
+            }
+            // Helper function to get currency abbreviation for a given currency code
+            function getCurrencyAbbreviation(currency) {
+                switch (currency) {
+                    case "JPY":
+                        return "JPY";
+                    case "EUR":
+                        return "EUR";
+                    case "INR":
+                        return "INR";
+                    case "GBP":
+                        return "GBP";
+                    case "AUD":
+                        return "AUD";
+                    case "CAD":
+                        return "CAD";
+                    case "SGD":
+                        return "SGD";
+                    case "CHF":
+                        return "CHF";
+                    case "MYR":
+                        return "MYR";
+                    case "CNY":
+                        return "CNY";
+                    default:
+                        return "";
+                }
+            }
+        </script>
+    </body>
+</html> -->
